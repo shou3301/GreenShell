@@ -1,0 +1,1126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Green Shell Test Page</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+		
+		
+		$('#submit_btn').click(function() {               
+			
+			$('.error').hide();
+			
+			var correct = true;
+			
+      		var model = $("#model_option").val();  
+        	if (model == "") {
+      			$("label#model_error").show();  
+      			$("#model_option").focus();  
+      			correct = false;  
+    		}
+			  
+        	var schedule = $("#schedule_option").val();  
+        	if (schedule == "") {  
+      			$("label#schedule_error").show();  
+      			$("#schedule_option").focus();  
+      			correct = false;   
+    		}
+			  
+        	var window = $("#window_option").val();  
+        	if (window == "") {  
+      			$("label#window_error").show();  
+      			$("#window_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var wall = $("#wall_option").val();  
+        	if (wall == "") {  
+      			$("label#wall_error").show();  
+      			$("#wall_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var floor = $("#floor_option").val();  
+        	if (floor == "") {  
+      			$("label#floor_error").show();  
+      			$("#floor_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var roof = $("#roof_option").val();  
+        	if (roof == "") {  
+      			$("label#roof_error").show();  
+      			$("#roof_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var lighting = $("#lighting_option").val();  
+        	if (lighting == "") { 
+      			$("label#lighting_error").show();  
+      			$("#lighting_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var air = $("#air_option").val();  
+        	if (air == "") {
+      			$("label#air_error").show();  
+      			$("air_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var hvac = $("#hvac_option").val();  
+        	if (hvac == "") {  
+      			$("label#hvac_error").show();  
+      			$("#hvac_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var heat = $("#heat_option").val();  
+        	if (heat == "") { 
+      			$("label#heat_error").show();  
+      			$("#heat_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var place = $("#place_option").val(); 
+        	if (place == "") {  
+      			$("label#place_error").show();  
+      			$("#place_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var control = $("#control_option").val(); 
+        	if (control == "") {  
+      			$("label#control_error").show();  
+      			$("#control_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var photovoltaic = $("#photovoltaic_option").val(); 
+        	if (photovoltaic == "") {  
+      			$("label#photovoltaic_error").show();  
+      			$("#photovoltaic_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var wind = $("#wind_option").val(); 
+        	if (wind == "") {  
+      			$("label#wind_error").show();  
+      			$("#wind_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var solar = $("#solar_option").val(); 
+        	if (solar == "") {  
+      			$("label#solar_error").show();  
+      			$("#solar_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var geo = $("#geo_option").val(); 
+        	if (geo == "") {  
+      			$("label#geo_error").show();  
+      			$("#geo_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var evaporat = $("#evaporat_option").val(); 
+        	if (evaporat == "") {  
+      			$("label#evaporat_error").show();  
+      			$("#evaporat_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var shading = $("#shading_option").val(); 
+        	if (shading == "") {  
+      			$("label#shading_error").show();  
+      			$("#shading_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	var rain = $("#rain_option").val(); 
+        	if (rain == "") {  
+      			$("label#rain_error").show();  
+      			$("#rain_option").focus();  
+      			correct = false;   
+    		}
+        	
+        	if (correct == false)
+        		return false;
+			
+			$('#process_info').html("<div id='message'></div>");  
+    		$('#message').html("<h2>Running simulator...</h2>")
+			
+			var userOption = {
+				"model" : model,
+				"schedule" : schedule,
+				"window" : window,
+				"wall" : wall,
+				"floor" : floor,
+				"roof" : roof,
+				"lighting" : lighting,
+				"air" : air,
+				"hvac" : hvac,
+				"heat" : heat,
+				"control" : control,
+				"photovoltaic" : photovoltaic,
+				"wind" : wind,
+				"solar" : solar,
+				"geo" : geo,
+				"evaporat" : evaporat,
+				"shading" : shading,
+				"rain" : rain,
+				"place" : place
+			};
+			
+    		var dataString = { "UserOption" : JSON.stringify(userOption) };
+			
+			$.ajax({
+      			type: "POST",
+      			url: "SimulatorServlet",
+      			success: function (response) {
+         			if (response) {
+         				var $table = $('<table>').appendTo($('#result_table'));
+         	            $.each(response, function(key, value) {   
+         	            	
+         	            	var $row = $('<tr>').appendTo($table).append($('<td>').text(key));
+         	            	
+         	            	$.each(value, function(idx, inner) {
+         	            		$row = $row.append($('<td>').text(inner));
+         	            	});
+
+         	            });
+         	           $('#process_info').find('div').remove();
+         			}
+        	 		else {
+            			alert("Simulation failed! Please check your configuration!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return false;
+			
+    	});
+		
+		
+		$("#model_option").change(function(){
+			
+			var entry = $("#model_option").val();
+			if (entry == "") {
+				 $("#model_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "model" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#model_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#schedule_option").change(function(){
+			
+			var entry = $("#schedule_option").val();
+			if (entry == "") {
+				$("#schedule_info").find('h4').remove();
+				return false;
+			}
+			
+			var dataString = { "Info" : "schedule" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+         				// alert(response);
+         				// document.getElementById('win_info').innerHTML = response;
+         				$wininfo = $("#schedule_info");
+         				$wininfo.find('h4').remove();
+         				
+         				$.each(response, function(key, value) {
+             				
+         					// document.getElementById('door_info').innerHTML = key + ": " + value;
+         					$('<h4>').text(key + ": " + value).appendTo($wininfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#window_option").change(function(){
+			
+			var entry = $("#window_option").val();
+			if (entry == "") {
+				 $("#window_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "window" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#window_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#wall_option").change(function(){
+			
+			var entry = $("#wall_option").val();
+			if (entry == "") {
+				 $("#wall_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "wall" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#wall_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#floor_option").change(function(){
+			
+			var entry = $("#floor_option").val();
+			if (entry == "") {
+				 $("#floor_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "floor" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#floor_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#roof_option").change(function(){
+			
+			var entry = $("#roof_option").val();
+			if (entry == "") {
+				 $("#roof_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "roof" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#roof_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+
+		$("#lighting_option").change(function(){
+			
+			var entry = $("#lighting_option").val();
+			if (entry == "") {
+				 $("#lighting_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "lighting" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#lighting_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#air_option").change(function(){
+			
+			var entry = $("#air_option").val();
+			if (entry == "") {
+				 $("#air_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "air" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#air_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#hvac_option").change(function(){
+			
+			var entry = $("#hvac_option").val();
+			if (entry == "") {
+				 $("#hvac_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "hvac" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#hvac_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#heat_option").change(function(){
+			
+			var entry = $("#heat_option").val();
+			if (entry == "") {
+				 $("#heat_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "heat" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#heat_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#control_option").change(function(){
+			
+			var entry = $("#control_option").val();
+			if (entry == "") {
+				 $("#contrl_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "control" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#control_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#photovoltaic_option").change(function(){
+			
+			var entry = $("#photovoltaic_option").val();
+			if (entry == "") {
+				 $("#photovoltaic_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "photovoltaic" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#photovoltaic_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#wind_option").change(function(){
+			
+			var entry = $("#wind_option").val();
+			if (entry == "") {
+				 $("#wind_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "wind" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#wind_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#solar_option").change(function(){
+			
+			var entry = $("#solar_option").val();
+			if (entry == "") {
+				 $("#solar_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "solar" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#solar_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#geo_option").change(function(){
+			
+			var entry = $("#geo_option").val();
+			if (entry == "") {
+				 $("#geo_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "geo" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#geo_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#evaporat_option").change(function(){
+			
+			var entry = $("#evaporat_option").val();
+			if (entry == "") {
+				 $("#evaporat_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "evaporat" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#evaporat_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#shading_option").change(function(){
+			
+			var entry = $("#shading_option").val();
+			if (entry == "") {
+				 $("#shading_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "shading" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#shading_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+		$("#rain_option").change(function(){
+			
+			var entry = $("#rain_option").val();
+			if (entry == "") {
+				 $("#rain_info").find('h4').remove();
+				 return false;
+			}
+			
+			var dataString = { "Info" : "rain" + entry };
+			
+			$.ajax({
+      			type: "GET",
+      			url: "InfoServlet",
+      			success: function (response) {
+         			if (response) {
+
+         				$doorinfo = $("#rain_info");
+         				$doorinfo.find('h4').remove();
+         					
+         				$.each(response, function(key, value) {
+         				
+         					$('<h4>').text(key + ": " + value).appendTo($doorinfo);
+         					
+         				});
+         			}
+        	 		else {
+            			alert("Failed to get infomation!");
+         			}
+      			},
+      			data: dataString
+   			});
+			
+			return true;
+			
+		});
+		
+	});
+</script>
+
+</head>
+<body>
+<a href="advanced.html">Advanced</a>
+<div id="simulator_form"> 
+<form name="simulator" action="">
+    Building Models: <br>
+	<select name="model" id="model_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="model" id="model_error">This field is required.</label>
+    <br>
+    Schedule/Internal Gain: <br>
+	<select name="schedule" id="schedule_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="schedule" id="schedule_error">This field is required.</label>
+    <br>
+    Window: <br>
+	<select name="window" id="window_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="window" id="window_error">This field is required.</label>
+    <br>
+    Wall: <br>
+	<select name="wall" id="wall_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="wall" id="wall_error">This field is required.</label>
+    <br>
+    Floor: <br>
+	<select name="floor" id="floor_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="wall" id="wall_error">This field is required.</label>
+    <br>
+    Roof: <br>
+	<select name="roof" id="roof_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="roof" id="roof_error">This field is required.</label>
+    <br>
+    Lignting Control: <br>
+	<select name="lighting" id="lighting_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="lighting" id="lighting_error">This field is required.</label>
+    <br>
+    Fresh Air sys: <br>
+	<select name="air" id="air_option">
+	</select>
+    <label class="error" for="air" id="air_error">This field is required.</label>
+    <br>
+    HVAC System: <br>
+	<select name="hvac" id="hvac_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="hvac" id="hvac_error">This field is required.</label>
+    <br>
+    Heat Recovery: <br>
+	<select name="heat" id="heat_option">
+	</select>
+    <label class="error" for="heat" id="heat_error">This field is required.</label>
+    <br>
+    Simulation Control: <br>
+	<select name="control" id="control_option">
+		<option value=""></option>
+	</select>
+    <label class="error" for="control" id="control_error">This field is required.</label>
+    <br>
+    Photovoltaic: <br>
+	<select name="photovoltaic" id="photovoltaic_option">
+	</select>
+    <label class="error" for="photovoltaic" id="photovoltaic_error">This field is required.</label>
+    <br>
+    Wind energy: <br>
+	<select name="wind" id="wind_option">
+	</select>
+    <label class="error" for="wind" id="wind_error">This field is required.</label>
+    <br>
+    Solar heater: <br>
+	<select name="solar" id="solar_option">
+	</select>
+    <label class="error" for="solar" id="solar_error">This field is required.</label>
+    <br>
+    Geothermal sys: <br>
+	<select name="geo" id="geo_option">
+	</select>
+    <label class="error" for="geo" id="geo_error">This field is required.</label>
+    <br>
+    Evaporative cooling: <br>
+	<select name="evaporat" id="evaporat_option">
+	</select>
+    <label class="error" for="evaporat" id="evaporat_error">This field is required.</label>
+    <br>
+    Active Shading: <br>
+	<select name="shading" id="shading_option">
+	</select>
+    <label class="error" for="shading" id="shading_error">This field is required.</label>
+    <br>
+    Rainwater collector: <br>
+	<select name="rain" id="rain_option">
+	</select>
+    <label class="error" for="rain" id="rain_error">This field is required.</label>
+    <br>
+    Location: <br>
+	<select name="place" id="place_option">
+    	<option value=""></option>
+	</select>
+    <label class="error" for="place" id="place_error">This field is required.</label>
+    <br>
+    <input type="submit" name="submit" class="button" id="submit_btn" value="Run" />
+</form>
+</div>
+
+<h3>Building Models Info</h3>
+<div id="model_info">
+</div>
+
+<br />
+
+<h3>Schedule/Internal Gain Info</h3>
+<div id="schedule_info">
+</div>
+
+<br />
+
+<h3>Window Info</h3>
+<div id="window_info">
+</div>
+
+<br />
+
+<h3>Wall Info</h3>
+<div id="wall_info">
+</div>
+
+<br />
+
+<h3>Floor Info</h3>
+<div id="floor_info">
+</div>
+
+<br />
+
+<h3>Roof Info</h3>
+<div id="roof_info">
+</div>
+
+<br />
+
+<h3>Lighting Control Info</h3>
+<div id="lighting_info">
+</div>
+
+<br />
+
+<h3>Fresh Air sys Info</h3>
+<div id="air_info">
+</div>
+
+<br />
+
+<h3>HVAC System Info</h3>
+<div id="hvac_info">
+</div>
+
+<br />
+
+<h3>Heat Recovery Info</h3>
+<div id="heat_info">
+</div>
+
+<br />
+
+<h3>Simulation Control Info</h3>
+<div id="control_info">
+</div>
+
+<br />
+
+<h3>Photovoltaic Info</h3>
+<div id="photovoltaic_info">
+</div>
+
+<br />
+
+<h3>Wind Info</h3>
+<div id="wind_info">
+</div>
+
+<br />
+
+<h3>Solar Info</h3>
+<div id="solar_info">
+</div>
+
+<br />
+
+<h3>Geo Info</h3>
+<div id="geo_info">
+</div>
+
+<br />
+
+<h3>Evaporative Info</h3>
+<div id="evaporat_info">
+</div>
+
+<br />
+
+<h3>Shading Info</h3>
+<div id="shading_info">
+</div>
+
+<br />
+
+<h3>Rain Info</h3>
+<div id="rain_info">
+</div>
+
+<br />
+
+<div id="process_info">
+</div>
+
+<div id="result_table">
+</div>
+
+<script>
+
+$.get("InitServlet", function(response) { 
+	if (response) {
+		
+		// alert(response);
+
+       	$.each(response, function(key, value) {   
+         	            	
+        	var selectName = key + "_option";
+			
+			/* if (key == "door")
+				selectName = "door_option";
+			else if (key == "window")
+				selectName = "win_option";
+			else if (key == "place")
+				selectName = "place_option"; */
+				
+			selectName = "#" + selectName;
+         	            	
+        	$.each(value, function(idx, inner) {
+				var appendVal = "<option value='" + inner + "'>" + inner + "</option>";
+        		$(selectName).append(appendVal);
+      		});
+
+		});
+	}
+  	else {
+   		alert("Simulator initialization failed!");
+  	}
+});
+
+</script>
+
+</body>
+</html>
